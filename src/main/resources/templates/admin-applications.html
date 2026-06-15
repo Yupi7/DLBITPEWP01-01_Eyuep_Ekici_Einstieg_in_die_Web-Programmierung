@@ -6,6 +6,8 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
           rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
@@ -14,17 +16,46 @@
         <a class="navbar-brand" href="/">ATS Karriereportal</a>
 
         <div>
-            <a class="btn btn-outline-light me-2" href="/jobs">Zur Stellenliste</a>
-            <a class="btn btn-outline-warning" href="/logout">Logout</a>
+            <a class="btn btn-outline-light me-2" href="/jobs">
+                Zur Stellenliste
+            </a>
+
+            <a class="btn btn-outline-warning" href="/logout">
+                Logout
+            </a>
         </div>
     </div>
 </nav>
 
 <div class="container mt-5">
 
-    <h1 class="mb-4">Recruiter-Dashboard</h1>
+    <div class="mb-4">
+        <h1>Recruiter-Dashboard</h1>
+        <p class="text-muted">
+            Übersicht aller eingegangenen Bewerbungen
+        </p>
+    </div>
 
-    <form class="row g-2 mb-4" method="get" action="/admin/applications">
+    <div class="card mb-4 shadow-sm border-0">
+        <div class="card-body">
+            <h4 class="card-title mb-3">Bewerbungen nach Status</h4>
+
+            <div style="max-width: 420px; margin: auto;">
+                <canvas id="statusChart"
+                        th:attr="data-eingegangen=${eingegangen},
+                                 data-pruefung=${pruefung},
+                                 data-interview=${interview},
+                                 data-angenommen=${angenommen},
+                                 data-abgelehnt=${abgelehnt}">
+                </canvas>
+            </div>
+        </div>
+    </div>
+
+    <form class="row g-2 mb-4"
+          method="get"
+          action="/admin/applications">
+
         <div class="col-md-6">
             <input class="form-control"
                    type="text"
@@ -34,23 +65,29 @@
         </div>
 
         <div class="col-md-2">
-            <button class="btn btn-primary w-100" type="submit">
+            <button class="btn btn-primary w-100"
+                    type="submit">
                 Suchen
             </button>
         </div>
 
         <div class="col-md-2">
-            <a class="btn btn-secondary w-100" href="/admin/applications">
+            <a class="btn btn-secondary w-100"
+               href="/admin/applications">
                 Zurücksetzen
             </a>
         </div>
+
     </form>
 
-    <div class="alert alert-info" th:if="${#lists.isEmpty(applications)}">
+    <div class="alert alert-info"
+         th:if="${#lists.isEmpty(applications)}">
         Es liegen aktuell keine passenden Bewerbungen vor.
     </div>
 
-    <div class="card mb-4" th:each="app : ${applications}">
+    <div class="card mb-4 shadow border-0"
+         th:each="app : ${applications}">
+
         <div class="card-body">
 
             <h3 class="card-title">
@@ -75,7 +112,17 @@
 
             <p class="mb-1">
                 <strong>Status:</strong>
-                <span class="badge bg-secondary" th:text="${app.status}"></span>
+
+                <span class="badge"
+                      th:classappend="${
+                          app.status == 'Eingegangen' ? 'bg-secondary' :
+                          app.status == 'In Prüfung' ? 'bg-primary' :
+                          app.status == 'Interview' ? 'bg-warning text-dark' :
+                          app.status == 'Angenommen' ? 'bg-success' :
+                          'bg-danger'
+                      }"
+                      th:text="${app.status}">
+                </span>
             </p>
 
             <p class="mb-3">
@@ -97,17 +144,21 @@
                   method="post">
 
                 <div class="col-md-4">
-                    <select class="form-select" name="status">
+                    <select class="form-select"
+                            name="status">
+
                         <option value="Eingegangen">Eingegangen</option>
                         <option value="In Prüfung">In Prüfung</option>
                         <option value="Interview">Interview</option>
                         <option value="Angenommen">Angenommen</option>
                         <option value="Abgelehnt">Abgelehnt</option>
+
                     </select>
                 </div>
 
                 <div class="col-md-3">
-                    <button class="btn btn-primary" type="submit">
+                    <button class="btn btn-primary"
+                            type="submit">
                         Status ändern
                     </button>
                 </div>
@@ -118,7 +169,9 @@
                   method="post">
 
                 <div class="mb-2">
-                    <label class="form-label">Interne Notiz</label>
+                    <label class="form-label">
+                        Interne Notiz
+                    </label>
 
                     <textarea class="form-control"
                               name="note"
@@ -127,7 +180,8 @@
                     </textarea>
                 </div>
 
-                <button class="btn btn-secondary" type="submit">
+                <button class="btn btn-secondary"
+                        type="submit">
                     Notiz speichern
                 </button>
 
@@ -137,6 +191,55 @@
     </div>
 
 </div>
+
+<script>
+    const chartElement = document.getElementById('statusChart');
+
+    const eingegangen = Number(chartElement.dataset.eingegangen);
+    const pruefung = Number(chartElement.dataset.pruefung);
+    const interview = Number(chartElement.dataset.interview);
+    const angenommen = Number(chartElement.dataset.angenommen);
+    const abgelehnt = Number(chartElement.dataset.abgelehnt);
+
+    new Chart(chartElement, {
+        type: 'doughnut',
+        data: {
+            labels: [
+                'Eingegangen',
+                'In Prüfung',
+                'Interview',
+                'Angenommen',
+                'Abgelehnt'
+            ],
+            datasets: [{
+                label: 'Anzahl Bewerbungen',
+                data: [
+                    eingegangen,
+                    pruefung,
+                    interview,
+                    angenommen,
+                    abgelehnt
+                ],
+                backgroundColor: [
+                    '#6c757d', // Eingegangen (grau)
+                    '#0d6efd', // In Prüfung (blau)
+                    '#ffc107', // Interview (gelb)
+                    '#198754', // Angenommen (grün)
+                    '#dc3545'  // Abgelehnt (rot)
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+</script>
 
 </body>
 </html>

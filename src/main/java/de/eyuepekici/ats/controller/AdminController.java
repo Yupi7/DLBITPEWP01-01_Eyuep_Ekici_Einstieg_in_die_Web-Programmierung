@@ -24,18 +24,55 @@ public class AdminController {
         List<Application> applications;
 
         if (search != null && !search.isBlank()) {
+
             applications = applicationRepository
                     .findByFirstnameContainingIgnoreCaseOrLastnameContainingIgnoreCaseOrEmailContainingIgnoreCase(
                             search,
                             search,
                             search
                     );
+
         } else {
+
             applications = applicationRepository.findAll();
         }
 
+        long total = applicationRepository.count();
+
+        long eingegangen = applicationRepository.findAll()
+                .stream()
+                .filter(a -> "Eingegangen".equals(a.getStatus()))
+                .count();
+
+        long pruefung = applicationRepository.findAll()
+                .stream()
+                .filter(a -> "In Prüfung".equals(a.getStatus()))
+                .count();
+
+        long interview = applicationRepository.findAll()
+                .stream()
+                .filter(a -> "Interview".equals(a.getStatus()))
+                .count();
+
+        long angenommen = applicationRepository.findAll()
+                .stream()
+                .filter(a -> "Angenommen".equals(a.getStatus()))
+                .count();
+
+        long abgelehnt = applicationRepository.findAll()
+                .stream()
+                .filter(a -> "Abgelehnt".equals(a.getStatus()))
+                .count();
+
         model.addAttribute("applications", applications);
         model.addAttribute("search", search);
+
+        model.addAttribute("total", total);
+        model.addAttribute("eingegangen", eingegangen);
+        model.addAttribute("pruefung", pruefung);
+        model.addAttribute("interview", interview);
+        model.addAttribute("angenommen", angenommen);
+        model.addAttribute("abgelehnt", abgelehnt);
 
         return "admin-applications";
     }
@@ -48,6 +85,7 @@ public class AdminController {
                 .orElseThrow();
 
         application.setStatus(status);
+
         applicationRepository.save(application);
 
         return "redirect:/admin/applications";
@@ -61,6 +99,7 @@ public class AdminController {
                 .orElseThrow();
 
         application.setNote(note);
+
         applicationRepository.save(application);
 
         return "redirect:/admin/applications";
