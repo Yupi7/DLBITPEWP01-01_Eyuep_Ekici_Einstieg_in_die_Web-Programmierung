@@ -7,7 +7,12 @@ import de.eyuepekici.ats.repository.JobRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 
 @Controller
@@ -26,21 +31,36 @@ public class ApplicationController {
         Job job = jobRepository.findById(jobId).orElseThrow();
 
         model.addAttribute("job", job);
-        model.addAttribute("application", new Application());
+        model.addAttribute("applicationForm", new Application());
 
         return "apply";
     }
 
     @PostMapping("/apply/{jobId}")
-    public String submitApplication(@PathVariable Long jobId,
-                                    @ModelAttribute Application application) {
+    public String submitApplication(
+            @PathVariable Long jobId,
+            @ModelAttribute Application applicationForm,
+            @RequestParam("cv") MultipartFile cvFile
+    ) throws IOException {
+
         Job job = jobRepository.findById(jobId).orElseThrow();
 
-        application.setJob(job);
-        application.setStatus("Eingegangen");
-        application.setCreatedAt(LocalDateTime.now());
+        if (!cvFile.isEmpty()) {
+            String fileName = cvFile.getOriginalFilename();
 
-        applicationRepository.save(application);
+            Path uploadPath = Paths.get("src/main/resources/static/uploads");
+            Files.createDirectories(uploadPath);
+
+            cvFile.transferTo(uploadPath.resolve(fileName));
+
+            applicationForm.setCvFileName(fileName);
+        }
+
+        applicationForm.setJob(job);
+        applicationForm.setStatus("Eingegangen");
+        applicationForm.setCreatedAt(LocalDateTime.now());
+
+        applicationRepository.save(applicationForm);
 
         return "redirect:/application-success";
     }

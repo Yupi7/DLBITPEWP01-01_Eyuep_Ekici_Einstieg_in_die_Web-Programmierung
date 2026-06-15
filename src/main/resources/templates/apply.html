@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <title>Bewerbung</title>
 </head>
 <body>
@@ -10,7 +11,10 @@
 <h1>Bewerbung für:</h1>
 <h2 th:text="${job.title}"></h2>
 
-<form th:action="@{/apply/{id}(id=${job.id})}" th:object="${application}" method="post">
+<form th:action="@{/apply/{id}(id=${job.id})}"
+      th:object="${applicationForm}"
+      method="post"
+      enctype="multipart/form-data">
 
     <label>Vorname</label><br>
     <input type="text" th:field="*{firstname}" required><br><br>
@@ -23,6 +27,9 @@
 
     <label>Telefon</label><br>
     <input type="text" th:field="*{phone}"><br><br>
+
+    <label>Lebenslauf als PDF</label><br>
+    <input type="file" name="cv" accept="application/pdf" required><br><br>
 
     <label>
         <input type="checkbox" required>

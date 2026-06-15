@@ -39,6 +39,18 @@
         <span th:text="${app.status}"></span>
     </p>
 
+    <p>
+        <strong>Lebenslauf:</strong>
+        <span th:if="${app.cvFileName != null}">
+            <a th:href="@{/uploads/{file}(file=${app.cvFileName})}"
+               th:text="${app.cvFileName}">
+            </a>
+        </span>
+        <span th:if="${app.cvFileName == null}">
+            Keine Datei hochgeladen
+        </span>
+    </p>
+
     <form th:action="@{/admin/applications/{id}/status(id=${app.id})}" method="post">
 
         <label>Status ändern:</label>

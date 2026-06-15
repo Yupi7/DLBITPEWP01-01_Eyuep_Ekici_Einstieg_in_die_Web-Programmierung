@@ -14,8 +14,8 @@ public class Application {
     private String lastname;
     private String email;
     private String phone;
-
     private String status;
+    private String cvFileName;
 
     private LocalDateTime createdAt;
 
@@ -67,6 +67,14 @@ public class Application {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getCvFileName() {
+        return cvFileName;
+    }
+
+    public void setCvFileName(String cvFileName) {
+        this.cvFileName = cvFileName;
     }
 
     public LocalDateTime getCreatedAt() {
