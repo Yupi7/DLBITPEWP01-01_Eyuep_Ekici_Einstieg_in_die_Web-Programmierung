@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Stellendetails</title>
+</head>
+<body>
+
+<a href="/jobs">Zurück zur Stellenliste</a>
+
+<h1 th:text="${job.title}"></h1>
+
+<p>
+    <strong>Standort:</strong>
+    <span th:text="${job.location}"></span>
+</p>
+
+<h2>Beschreibung</h2>
+<p th:text="${job.description}"></p>
+
+<a th:href="@{/apply/{id}(id=${job.id})}">
+    Bewerben
+</a>
+
+</body>
+</html>

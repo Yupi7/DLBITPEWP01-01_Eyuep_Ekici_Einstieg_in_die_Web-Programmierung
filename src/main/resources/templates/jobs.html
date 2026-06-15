@@ -10,6 +10,11 @@
 <div th:each="job : ${jobs}">
     <h2 th:text="${job.title}"></h2>
     <p th:text="${job.location}"></p>
+
+    <a th:href="@{/jobs/{id}(id=${job.id})}">
+        Details
+    </a>
+
     <hr>
 </div>
 
