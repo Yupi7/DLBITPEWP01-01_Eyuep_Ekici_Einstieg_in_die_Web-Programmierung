@@ -24,8 +24,30 @@
 
     <h1 class="mb-4">Recruiter-Dashboard</h1>
 
+    <form class="row g-2 mb-4" method="get" action="/admin/applications">
+        <div class="col-md-6">
+            <input class="form-control"
+                   type="text"
+                   name="search"
+                   placeholder="Nach Name oder E-Mail suchen"
+                   th:value="${search}">
+        </div>
+
+        <div class="col-md-2">
+            <button class="btn btn-primary w-100" type="submit">
+                Suchen
+            </button>
+        </div>
+
+        <div class="col-md-2">
+            <a class="btn btn-secondary w-100" href="/admin/applications">
+                Zurücksetzen
+            </a>
+        </div>
+    </form>
+
     <div class="alert alert-info" th:if="${#lists.isEmpty(applications)}">
-        Es liegen aktuell keine Bewerbungen vor.
+        Es liegen aktuell keine passenden Bewerbungen vor.
     </div>
 
     <div class="card mb-4" th:each="app : ${applications}">
@@ -96,9 +118,7 @@
                   method="post">
 
                 <div class="mb-2">
-                    <label class="form-label">
-                        Interne Notiz
-                    </label>
+                    <label class="form-label">Interne Notiz</label>
 
                     <textarea class="form-control"
                               name="note"

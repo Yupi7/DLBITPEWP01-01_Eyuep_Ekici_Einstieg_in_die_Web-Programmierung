@@ -6,6 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 public class AdminController {
 
@@ -16,8 +18,25 @@ public class AdminController {
     }
 
     @GetMapping("/admin/applications")
-    public String applications(Model model) {
-        model.addAttribute("applications", applicationRepository.findAll());
+    public String applications(@RequestParam(required = false) String search,
+                               Model model) {
+
+        List<Application> applications;
+
+        if (search != null && !search.isBlank()) {
+            applications = applicationRepository
+                    .findByFirstnameContainingIgnoreCaseOrLastnameContainingIgnoreCaseOrEmailContainingIgnoreCase(
+                            search,
+                            search,
+                            search
+                    );
+        } else {
+            applications = applicationRepository.findAll();
+        }
+
+        model.addAttribute("applications", applications);
+        model.addAttribute("search", search);
+
         return "admin-applications";
     }
 

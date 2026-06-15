@@ -21,14 +21,17 @@ public class ApplicationController {
     private final ApplicationRepository applicationRepository;
     private final JobRepository jobRepository;
 
-    public ApplicationController(ApplicationRepository applicationRepository, JobRepository jobRepository) {
+    public ApplicationController(ApplicationRepository applicationRepository,
+                                 JobRepository jobRepository) {
         this.applicationRepository = applicationRepository;
         this.jobRepository = jobRepository;
     }
 
     @GetMapping("/apply/{jobId}")
     public String showApplicationForm(@PathVariable Long jobId, Model model) {
-        Job job = jobRepository.findById(jobId).orElseThrow();
+
+        Job job = jobRepository.findById(jobId)
+                .orElseThrow();
 
         model.addAttribute("job", job);
         model.addAttribute("applicationForm", new Application());
@@ -43,15 +46,22 @@ public class ApplicationController {
             @RequestParam("cv") MultipartFile cvFile
     ) throws IOException {
 
-        Job job = jobRepository.findById(jobId).orElseThrow();
+        Job job = jobRepository.findById(jobId)
+                .orElseThrow();
 
         if (!cvFile.isEmpty()) {
+
             String fileName = cvFile.getOriginalFilename();
 
-            Path uploadPath = Paths.get("src/main/resources/static/uploads");
+            Path uploadPath = Paths.get(
+                    "src/main/resources/static/uploads"
+            );
+
             Files.createDirectories(uploadPath);
 
-            cvFile.transferTo(uploadPath.resolve(fileName));
+            cvFile.transferTo(
+                    uploadPath.resolve(fileName)
+            );
 
             applicationForm.setCvFileName(fileName);
         }
