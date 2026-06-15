@@ -1,15 +1,34 @@
 <!DOCTYPE html>
-<html>
+<html lang="de">
 <head>
+    <meta charset="UTF-8">
     <title>Bewerbung gesendet</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+          rel="stylesheet">
 </head>
 <body>
 
-<h1>Bewerbung erfolgreich übermittelt</h1>
+<nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">ATS Karriereportal</a>
+    </div>
+</nav>
 
-<p>Vielen Dank. Ihre Bewerbung wurde im System gespeichert.</p>
+<div class="container mt-5">
 
-<a href="/jobs">Zurück zu den Stellenangeboten</a>
+    <div class="alert alert-success">
+        <h1>Bewerbung erfolgreich übermittelt</h1>
+        <p class="mb-0">
+            Vielen Dank. Ihre Bewerbung wurde im System gespeichert.
+        </p>
+    </div>
+
+    <a href="/jobs" class="btn btn-primary">
+        Zurück zu den Stellenangeboten
+    </a>
+
+</div>
 
 </body>
 </html>

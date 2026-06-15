@@ -3,71 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <title>Bewerbungen</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+          rel="stylesheet">
 </head>
 <body>
 
-<h1>Recruiter-Dashboard</h1>
+<nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">ATS Karriereportal</a>
+        <a class="btn btn-outline-light" href="/jobs">Zur Stellenliste</a>
+    </div>
+</nav>
 
-<a href="/jobs">Zurück zu den Stellen</a>
+<div class="container mt-5">
 
-<hr>
+    <h1 class="mb-4">Recruiter-Dashboard</h1>
 
-<div th:each="app : ${applications}">
+    <div class="alert alert-info" th:if="${#lists.isEmpty(applications)}">
+        Es liegen aktuell keine Bewerbungen vor.
+    </div>
 
-    <h2>
-        <span th:text="${app.firstname}"></span>
-        <span th:text="${app.lastname}"></span>
-    </h2>
+    <div class="card mb-4" th:each="app : ${applications}">
+        <div class="card-body">
 
-    <p>
-        <strong>E-Mail:</strong>
-        <span th:text="${app.email}"></span>
-    </p>
+            <h3 class="card-title">
+                <span th:text="${app.firstname}"></span>
+                <span th:text="${app.lastname}"></span>
+            </h3>
 
-    <p>
-        <strong>Telefon:</strong>
-        <span th:text="${app.phone}"></span>
-    </p>
+            <p class="mb-1">
+                <strong>E-Mail:</strong>
+                <span th:text="${app.email}"></span>
+            </p>
 
-    <p>
-        <strong>Stelle:</strong>
-        <span th:text="${app.job.title}"></span>
-    </p>
+            <p class="mb-1">
+                <strong>Telefon:</strong>
+                <span th:text="${app.phone}"></span>
+            </p>
 
-    <p>
-        <strong>Status:</strong>
-        <span th:text="${app.status}"></span>
-    </p>
+            <p class="mb-1">
+                <strong>Stelle:</strong>
+                <span th:text="${app.job.title}"></span>
+            </p>
 
-    <p>
-        <strong>Lebenslauf:</strong>
-        <span th:if="${app.cvFileName != null}">
-            <a th:href="@{/uploads/{file}(file=${app.cvFileName})}"
-               th:text="${app.cvFileName}">
-            </a>
-        </span>
-        <span th:if="${app.cvFileName == null}">
-            Keine Datei hochgeladen
-        </span>
-    </p>
+            <p class="mb-1">
+                <strong>Status:</strong>
+                <span class="badge bg-secondary" th:text="${app.status}"></span>
+            </p>
 
-    <form th:action="@{/admin/applications/{id}/status(id=${app.id})}" method="post">
+            <p class="mb-3">
+                <strong>Lebenslauf:</strong>
 
-        <label>Status ändern:</label>
+                <span th:if="${app.cvFileName != null}">
+                    <a th:href="@{/uploads/{file}(file=${app.cvFileName})}"
+                       th:text="${app.cvFileName}">
+                    </a>
+                </span>
 
-        <select name="status">
-            <option value="Eingegangen">Eingegangen</option>
-            <option value="In Prüfung">In Prüfung</option>
-            <option value="Interview">Interview</option>
-            <option value="Angenommen">Angenommen</option>
-            <option value="Abgelehnt">Abgelehnt</option>
-        </select>
+                <span th:if="${app.cvFileName == null}">
+                    Keine Datei hochgeladen
+                </span>
+            </p>
 
-        <button type="submit">Status ändern</button>
+            <form class="row g-2"
+                  th:action="@{/admin/applications/{id}/status(id=${app.id})}"
+                  method="post">
 
-    </form>
+                <div class="col-md-4">
+                    <select class="form-select" name="status">
+                        <option value="Eingegangen">Eingegangen</option>
+                        <option value="In Prüfung">In Prüfung</option>
+                        <option value="Interview">Interview</option>
+                        <option value="Angenommen">Angenommen</option>
+                        <option value="Abgelehnt">Abgelehnt</option>
+                    </select>
+                </div>
 
-    <hr>
+                <div class="col-md-3">
+                    <button class="btn btn-primary" type="submit">
+                        Status ändern
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
 
 </div>
 
