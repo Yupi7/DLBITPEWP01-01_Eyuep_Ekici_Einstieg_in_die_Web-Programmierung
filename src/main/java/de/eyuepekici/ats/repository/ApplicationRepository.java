@@ -7,7 +7,9 @@ import java.util.List;
 
 public interface ApplicationRepository extends JpaRepository<Application, Long> {
 
-    List<Application> findByFirstnameContainingIgnoreCaseOrLastnameContainingIgnoreCaseOrEmailContainingIgnoreCase(
+    List<Application> findAllByOrderByCreatedAtDesc();
+
+    List<Application> findByFirstnameContainingIgnoreCaseOrLastnameContainingIgnoreCaseOrEmailContainingIgnoreCaseOrderByCreatedAtDesc(
             String firstname,
             String lastname,
             String email

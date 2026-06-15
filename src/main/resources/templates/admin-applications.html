@@ -125,6 +125,11 @@
                 </span>
             </p>
 
+            <p class="mb-1">
+                <strong>Eingegangen am:</strong>
+                <span th:text="${#temporals.format(app.createdAt, 'dd.MM.yyyy HH:mm')}"></span>
+            </p>
+
             <p class="mb-3">
                 <strong>Lebenslauf:</strong>
 

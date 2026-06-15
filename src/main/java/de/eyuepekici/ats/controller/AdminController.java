@@ -24,43 +24,37 @@ public class AdminController {
         List<Application> applications;
 
         if (search != null && !search.isBlank()) {
-
             applications = applicationRepository
-                    .findByFirstnameContainingIgnoreCaseOrLastnameContainingIgnoreCaseOrEmailContainingIgnoreCase(
+                    .findByFirstnameContainingIgnoreCaseOrLastnameContainingIgnoreCaseOrEmailContainingIgnoreCaseOrderByCreatedAtDesc(
                             search,
                             search,
                             search
                     );
-
         } else {
-
-            applications = applicationRepository.findAll();
+            applications = applicationRepository.findAllByOrderByCreatedAtDesc();
         }
 
-        long total = applicationRepository.count();
+        List<Application> allApplications = applicationRepository.findAll();
 
-        long eingegangen = applicationRepository.findAll()
-                .stream()
+        long total = allApplications.size();
+
+        long eingegangen = allApplications.stream()
                 .filter(a -> "Eingegangen".equals(a.getStatus()))
                 .count();
 
-        long pruefung = applicationRepository.findAll()
-                .stream()
+        long pruefung = allApplications.stream()
                 .filter(a -> "In Prüfung".equals(a.getStatus()))
                 .count();
 
-        long interview = applicationRepository.findAll()
-                .stream()
+        long interview = allApplications.stream()
                 .filter(a -> "Interview".equals(a.getStatus()))
                 .count();
 
-        long angenommen = applicationRepository.findAll()
-                .stream()
+        long angenommen = allApplications.stream()
                 .filter(a -> "Angenommen".equals(a.getStatus()))
                 .count();
 
-        long abgelehnt = applicationRepository.findAll()
-                .stream()
+        long abgelehnt = allApplications.stream()
                 .filter(a -> "Abgelehnt".equals(a.getStatus()))
                 .count();
 
@@ -85,7 +79,6 @@ public class AdminController {
                 .orElseThrow();
 
         application.setStatus(status);
-
         applicationRepository.save(application);
 
         return "redirect:/admin/applications";
@@ -99,7 +92,6 @@ public class AdminController {
                 .orElseThrow();
 
         application.setNote(note);
-
         applicationRepository.save(application);
 
         return "redirect:/admin/applications";
