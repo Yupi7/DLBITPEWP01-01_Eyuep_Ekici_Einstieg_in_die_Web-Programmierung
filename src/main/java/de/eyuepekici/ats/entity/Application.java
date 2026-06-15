@@ -17,6 +17,9 @@ public class Application {
     private String status;
     private String cvFileName;
 
+    @Column(length = 5000)
+    private String note;
+
     private LocalDateTime createdAt;
 
     @ManyToOne
@@ -75,6 +78,14 @@ public class Application {
 
     public void setCvFileName(String cvFileName) {
         this.cvFileName = cvFileName;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 
     public LocalDateTime getCreatedAt() {

@@ -33,4 +33,17 @@ public class AdminController {
 
         return "redirect:/admin/applications";
     }
+
+    @PostMapping("/admin/applications/{id}/note")
+    public String updateNote(@PathVariable Long id,
+                             @RequestParam String note) {
+
+        Application application = applicationRepository.findById(id)
+                .orElseThrow();
+
+        application.setNote(note);
+        applicationRepository.save(application);
+
+        return "redirect:/admin/applications";
+    }
 }

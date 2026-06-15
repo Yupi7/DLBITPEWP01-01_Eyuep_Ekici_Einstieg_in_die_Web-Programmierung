@@ -70,7 +70,7 @@
                 </span>
             </p>
 
-            <form class="row g-2"
+            <form class="row g-2 mb-3"
                   th:action="@{/admin/applications/{id}/status(id=${app.id})}"
                   method="post">
 
@@ -89,6 +89,27 @@
                         Status ändern
                     </button>
                 </div>
+
+            </form>
+
+            <form th:action="@{/admin/applications/{id}/note(id=${app.id})}"
+                  method="post">
+
+                <div class="mb-2">
+                    <label class="form-label">
+                        Interne Notiz
+                    </label>
+
+                    <textarea class="form-control"
+                              name="note"
+                              rows="3"
+                              th:text="${app.note}">
+                    </textarea>
+                </div>
+
+                <button class="btn btn-secondary" type="submit">
+                    Notiz speichern
+                </button>
 
             </form>
 
