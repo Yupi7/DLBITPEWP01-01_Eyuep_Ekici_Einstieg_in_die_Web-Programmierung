@@ -1,21 +1,43 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <title>Offene Stellen</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+          rel="stylesheet">
 </head>
 <body>
 
-<h1>Offene Stellen</h1>
+<nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">ATS Karriereportal</a>
+        <a class="btn btn-outline-light" href="/admin/applications">Recruiter-Dashboard</a>
+    </div>
+</nav>
 
-<div th:each="job : ${jobs}">
-    <h2 th:text="${job.title}"></h2>
-    <p th:text="${job.location}"></p>
+<div class="container mt-5">
 
-    <a th:href="@{/jobs/{id}(id=${job.id})}">
-        Details
-    </a>
+    <h1 class="mb-4">Offene Stellen</h1>
 
-    <hr>
+    <div class="card mb-3" th:each="job : ${jobs}">
+        <div class="card-body">
+            <h3 class="card-title" th:text="${job.title}"></h3>
+
+            <p class="text-muted">
+                Standort:
+                <span th:text="${job.location}"></span>
+            </p>
+
+            <p class="card-text" th:text="${job.description}"></p>
+
+            <a class="btn btn-primary"
+               th:href="@{/jobs/{id}(id=${job.id})}">
+                Details ansehen
+            </a>
+        </div>
+    </div>
+
 </div>
 
 </body>
