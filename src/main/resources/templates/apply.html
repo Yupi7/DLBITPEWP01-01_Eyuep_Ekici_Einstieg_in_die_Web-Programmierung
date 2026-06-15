@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Bewerbung</title>
+</head>
+<body>
+
+<a th:href="@{/jobs/{id}(id=${job.id})}">Zurück zur Stelle</a>
+
+<h1>Bewerbung für:</h1>
+<h2 th:text="${job.title}"></h2>
+
+<form th:action="@{/apply/{id}(id=${job.id})}" th:object="${application}" method="post">
+
+    <label>Vorname</label><br>
+    <input type="text" th:field="*{firstname}" required><br><br>
+
+    <label>Nachname</label><br>
+    <input type="text" th:field="*{lastname}" required><br><br>
+
+    <label>E-Mail</label><br>
+    <input type="email" th:field="*{email}" required><br><br>
+
+    <label>Telefon</label><br>
+    <input type="text" th:field="*{phone}"><br><br>
+
+    <label>
+        <input type="checkbox" required>
+        Ich stimme der Verarbeitung meiner Bewerbungsdaten zu.
+    </label>
+
+    <br><br>
+
+    <button type="submit">Bewerbung absenden</button>
+
+</form>
+
+</body>
+</html>
