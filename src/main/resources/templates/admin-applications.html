@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bewerbungen</title>
+</head>
+<body>
+
+<h1>Recruiter-Dashboard</h1>
+
+<a href="/jobs">Zurück zu den Stellen</a>
+
+<hr>
+
+<div th:each="app : ${applications}">
+
+    <h2>
+        <span th:text="${app.firstname}"></span>
+        <span th:text="${app.lastname}"></span>
+    </h2>
+
+    <p>
+        <strong>E-Mail:</strong>
+        <span th:text="${app.email}"></span>
+    </p>
+
+    <p>
+        <strong>Telefon:</strong>
+        <span th:text="${app.phone}"></span>
+    </p>
+
+    <p>
+        <strong>Stelle:</strong>
+        <span th:text="${app.job.title}"></span>
+    </p>
+
+    <p>
+        <strong>Status:</strong>
+        <span th:text="${app.status}"></span>
+    </p>
+
+    <form th:action="@{/admin/applications/{id}/status(id=${app.id})}" method="post">
+
+        <label>Status ändern:</label>
+
+        <select name="status">
+            <option value="Eingegangen">Eingegangen</option>
+            <option value="In Prüfung">In Prüfung</option>
+            <option value="Interview">Interview</option>
+            <option value="Angenommen">Angenommen</option>
+            <option value="Abgelehnt">Abgelehnt</option>
+        </select>
+
+        <button type="submit">Status ändern</button>
+
+    </form>
+
+    <hr>
+
+</div>
+
+</body>
+</html>
